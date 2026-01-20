@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -370,92 +370,93 @@
             </div>
           </div>
         </div>
-
       </div>
-        <div class="container mb-5 pb-5">
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <h2 class="card-title mb-3">Check Your Understanding</h2>
-              <p class="mb-4">
-                Answer each question in your own words. When you are ready,
-                click <strong>Submit</strong> to reveal the correct answers.
-              </p>
+      <div class="container mb-5 pb-5">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h2 class="card-title mb-3">Check Your Understanding</h2>
+            <p class="mb-4">
+              Answer each question in your own words. When you are ready, click
+              <strong>Submit</strong> to reveal the correct answers.
+            </p>
 
-              <!-- Question 1 -->
-              <div class="mb-4">
-                <label class="form-label fw-bold"
-                  >1. Why is it an advantage for a red blood cell to lack a
-                  nucleus?</label
-                >
-                <textarea
-                  class="form-control"
-                  rows="4"
-                  placeholder="Your answer..."
-                ></textarea>
-              </div>
-
-              <!-- Question 2 -->
-              <div class="mb-4">
-                <label class="form-label fw-bold"
-                  >How does the structure of a sperm cell reflect its primary
-                  function?</label
-                >
-                <textarea
-                  class="form-control"
-                  rows="4"
-                  placeholder="Your answer..."
-                ></textarea>
-              </div>
-
-              <!-- Question 3 -->
-              <div class="mb-4">
-                <label class="form-label fw-bold"
-                  >3. Compare and contrast a root hair cell with a human nerve
-                  cell in terms of their <em>projections</em>.</label
-                >
-                <textarea
-                  class="form-control"
-                  rows="4"
-                  placeholder="Your answer..."
-                ></textarea>
-              </div>
-
-              <!-- Answers -->
-              <div
-                id="answers"
-                class="alert alert-secondary mt-4"
-                style="display: none"
+            <!-- Question 1 -->
+            <div class="mb-4">
+              <label class="form-label fw-bold"
+                >1. Why is it an advantage for a red blood cell to lack a
+                nucleus?</label
               >
-                <h5 class="alert-heading">Correct Answers</h5>
-                <ol>
-                  <li>
-                    <strong>Red blood cells:</strong> Lacking a nucleus provides
-                    more space for haemoglobin, allowing the cell to carry more
-                    oxygen and making it more flexible to pass through narrow
-                    capillaries.
-                  </li>
-                  <li>
-                    <strong>Sperm cell:</strong> The streamlined shape, long
-                    tail (flagellum), many mitochondria, and acrosome help the
-                    sperm swim efficiently and penetrate the egg for
-                    fertilisation.
-                  </li>
-                  <li>
-                    <strong>Root hair vs nerve cell:</strong> A root hair cell
-                    has a long hair-like projection to increase surface area for
-                    water and mineral absorption, while a nerve cell has long
-                    projections (axon and dendrites) to transmit electrical
-                    impulses over long distances.
-                  </li>
-                </ol>
-              </div>
-
-              <button class="btn btn-primary mb-5" onclick="showAnswers()">
-                Submit
-              </button>
+              <textarea
+                id="qEssay1"
+                class="form-control"
+                rows="4"
+                placeholder="Your answer..."
+              ></textarea>
             </div>
+
+            <!-- Question 2 -->
+            <div class="mb-4">
+              <label class="form-label fw-bold"
+                >How does the structure of a sperm cell reflect its primary
+                function?</label
+              >
+              <textarea
+                id="qEssay2"
+                class="form-control"
+                rows="4"
+                placeholder="Your answer..."
+              ></textarea>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="mb-4">
+              <label class="form-label fw-bold"
+                >3. Compare and contrast a root hair cell with a human nerve
+                cell in terms of their <em>projections</em>.</label
+              >
+              <textarea
+                id="qEssay3"
+                class="form-control"
+                rows="4"
+                placeholder="Your answer..."
+              ></textarea>
+            </div>
+            <div id="essayResult" class="alert alert-info mt-3 d-none"></div>
+
+            <!-- Answers -->
+            <div
+              id="answers"
+              class="alert alert-secondary mt-4 d-none"
+            >
+              <h5 class="alert-heading">Correct Answers</h5>
+              <ol>
+                <li>
+                  <strong>Red blood cells:</strong> Lacking a nucleus provides
+                  more space for hemoglobin, allowing the cell to carry more
+                  oxygen and making it more flexible to pass through narrow
+                  capillaries.
+                </li>
+                <li>
+                  <strong>Sperm cell:</strong> The streamlined shape, long tail
+                  (flagellum), many mitochondria, and acrosome help the sperm
+                  swim efficiently and penetrate the egg for fertilisation.
+                </li>
+                <li>
+                  <strong>Root hair vs nerve cell:</strong> A root hair cell has
+                  a long hair-like projection to increase surface area for water
+                  and mineral absorption, while a nerve cell has long
+                  projections (axon and dendrites) to transmit electrical
+                  impulses over long distances.
+                </li>
+              </ol>
+            </div>
+
+            <button class="btn btn-primary mb-5" onclick="checkUnderstanding()">
+              Submit
+            </button>
           </div>
         </div>
+      </div>
     </main>
 
     <div class="container mb-5 pb-5">
@@ -1183,11 +1184,89 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
     <script>
-      function showAnswers() {
-        document.getElementById("answers").style.display = "block";
+      function normalize(text) {
+        return text.toLowerCase();
+      }
+
+      function scoreAnswer(answer, keywords) {
+        let score = 0;
+
+        keywords.forEach((keyword) => {
+          if (answer.includes(keyword)) {
+            score++;
+          }
+        });
+
+        return score;
+      }
+
+      function checkUnderstanding() {
+        const answers = [
+          normalize(document.getElementById("qEssay1").value),
+          normalize(document.getElementById("qEssay2").value),
+          normalize(document.getElementById("qEssay3").value),
+        ];
+
+        const keywordSets = [
+          // Question 1
+          [
+            "more space",
+            "carry more oxygen",
+            "hemoglobin",
+            "flexible",
+            "narrow capillaries",
+          ],
+
+          // Question 2
+          [
+            "streamlined",
+            "long tail",
+            "flagellum",
+            "swim efficiently",
+            "penetrate the egg",
+            "mitochondria",
+          ],
+
+          // Question 3
+          [
+            "root hair cell",
+            "long hair-like projection",
+            "increase surface area",
+            "mineral absorption",
+            "nerve cell",
+            "long projections",
+            "transmit electrical impulses",
+            "axon",
+            "dendrites",
+          ],
+        ];
+
+        let totalScore = 0;
+        let maxScore = 0;
+        let feedback = "<h5>Essay Results</h5><ol>";
+
+        answers.forEach((ans, index) => {
+          const score = scoreAnswer(ans, keywordSets[index]);
+          const max = keywordSets[index].length;
+
+          totalScore += score;
+          maxScore += max;
+
+          feedback += `<li>Score: <strong>${score} / ${max}</strong></li>`;
+        });
+
+        feedback += `</ol><hr><strong>Total Score: ${totalScore} / ${maxScore}</strong>`;
+
+        const resultBox = document.getElementById("essayResult");
+        resultBox.innerHTML = feedback;
+        resultBox.classList.remove("d-none");
+
+        const answers1 = document.getElementById("answers");
+        answers1.classList.remove("d-none");
       }
     </script>
-<script>
+
+    <script>
       function toggleAutobio() {
         const autobio = document.getElementById("autobio");
         const btn = event.target;
@@ -1213,7 +1292,7 @@
           ans7: "B",
           ans8: "B",
           ans9: "B",
-          ans10: "C"
+          ans10: "C",
         };
         const multipleQues = {
           q1: "Which cell type is characterized by having a cell wall made of chitin and no chloroplasts?",
@@ -1243,7 +1322,7 @@
             m7: $('input[name="q7"]:checked').val() || "No answer",
             m8: $('input[name="q8"]:checked').val() || "No answer",
             m9: $('input[name="q9"]:checked').val() || "No answer",
-            m10: $('input[name="q10"]:checked').val() || "No answer"
+            m10: $('input[name="q10"]:checked').val() || "No answer",
           };
 
           const name = $('input[name="student_name"]').val();
